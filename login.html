@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>WikiMatch — Login</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root{
+            --copper-1:#2b1207; --copper-2:#3d1f11;
+            --gold-1:#ffd37e; --gold-2:#ffb74d;
+            --muted:rgba(255,255,255,.92);
+            --glass:rgba(255,255,255,.06);
+            --border-light:rgba(255,255,255,.08);
+        }
+        *{box-sizing:border-box;margin:0;padding:0;font-family:'Poppins',sans-serif}
+        body{
+            min-height:100vh; display:flex; align-items:center; justify-content:center;
+            background:
+                radial-gradient(1200px 600px at 10% 10%, rgba(184,115,51,.18), transparent 8%),
+                radial-gradient(900px 400px at 90% 80%, rgba(255,195,120,.10), transparent 8%),
+                linear-gradient(180deg,var(--copper-1),var(--copper-2));
+            color:white; padding:20px;
+            -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+        }
+
+        .login-box{
+            width:100%; max-width:460px; border-radius:16px; padding:34px;
+            background:var(--glass); backdrop-filter:blur(14px);
+            border:1px solid var(--border-light);
+            box-shadow:0 30px 60px rgba(0,0,0,.45);
+            text-align:center;
+            animation:popIn .5s ease;
+        }
+        @keyframes popIn{ from{ transform: translateY(18px); opacity:0 } to{ transform:none; opacity:1 } }
+
+        .logo-icon{
+            width:78px;height:78px;border-radius:14px;
+            display:flex;align-items:center;justify-content:center;margin:0 auto 12px;
+            background:linear-gradient(135deg,#b87333,#ffd37e); color:#2b1207; font-size:30px;
+            box-shadow:0 8px 30px rgba(0,0,0,.45);
+        }
+
+        h1{ font-size:1.6rem; color:var(--gold-1); margin-bottom:6px; }
+        p.lead{ color:rgba(255,255,255,.72); margin-bottom:18px }
+
+        .field{ text-align:left; margin-bottom:14px; }
+        .field label{ display:block; color:var(--gold-1); margin-bottom:6px; font-weight:600; font-size:.92rem }
+        .field input{
+            width:100%; padding:12px 14px; border-radius:12px; border:1px solid var(--border-light);
+            background: rgba(255,255,255,.04); color:var(--muted); outline:none; font-size:1rem;
+        }
+        .field input:focus{ background: rgba(255,255,255,.08); border-color: rgba(255,211,126,.45) }
+
+        .row { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:6px; margin-bottom:14px }
+        .remember {
+            display:flex; align-items:center; gap:10px; color:rgba(255,255,255,.85);
+            font-size:.95rem;
+        }
+        .btn{
+            width:100%; padding:13px 16px; border-radius:12px; border:none;
+            background:linear-gradient(135deg,#b87333,#ffd37e); color:#2b1207; font-weight:800; cursor:pointer;
+            font-size:1.02rem; box-shadow:0 10px 25px rgba(0,0,0,.35);
+        }
+        .btn:active{ transform:scale(.98) }
+
+        .small { font-size:.9rem; color:rgba(255,255,255,.65); margin-top:12px }
+
+        /* toast */
+        .toast { position:fixed; right:18px; top:18px; background:rgba(0,0,0,.8); color:white;
+            padding:12px 16px; border-radius:10px; border-left:4px solid var(--gold-1); z-index:9999; }
+
+        @media (max-width:520px){
+            .login-box{ padding:22px }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-box" role="main" aria-labelledby="title">
+        <div class="logo-icon"><i class="fas fa-lock"></i></div>
+        <h1 id="title">Welcome Back</h1>
+        <p class="lead">Sign in to access WikiMatch — anyone can sign in.</p>
+
+        <div class="field">
+            <label for="email">Email</label>
+            <input id="email" type="email" autocomplete="email" placeholder="your@email.com">
+        </div>
+
+        <div class="field">
+            <label for="password">Password</label>
+            <input id="password" type="password" autocomplete="current-password" placeholder="••••••••">
+        </div>
+
+        <div class="row" style="align-items:center">
+            <div class="remember">
+                <input id="remember" type="checkbox" aria-label="Remember me"> <label for="remember" style="margin:0;cursor:pointer">Remember Me</label>
+            </div>
+            <div style="font-size:.9rem;color:rgba(255,255,255,.6)"><a href="#" style="color:var(--gold-1);text-decoration:none">Forgot?</a></div>
+        </div>
+
+        <button class="btn" id="loginBtn" aria-live="polite">Login</button>
+
+        <div class="small">Tip: This demo stores credentials locally (you chose Option-C). Use test credentials for public sites.</div>
+    </div>
+
+<script>
+    // AUTO-REDIRECT if already logged in
+    if (localStorage.getItem("logged_in") === "true") {
+        window.location.href = "index.html";
+    }
+
+    // DOM refs
+    const emailEl = document.getElementById("email");
+    const passEl = document.getElementById("password");
+    const rememberEl = document.getElementById("remember");
+    const loginBtn = document.getElementById("loginBtn");
+
+    // If saved credentials exist, autofill
+    const savedEmail = localStorage.getItem("saved_email");
+    const savedPass = localStorage.getItem("saved_pass");
+    if (savedEmail && savedPass) {
+        emailEl.value = savedEmail;
+        passEl.value = savedPass;
+        rememberEl.checked = true;
+    }
+
+    // Keyboard-friendly
+    document.addEventListener("keydown", (e) => { if (e.key === "Enter") login(); });
+
+    loginBtn.addEventListener("click", login);
+
+    function login() {
+        const email = emailEl.value.trim();
+        const pass = passEl.value.trim();
+
+        if (!email || !pass) {
+            notify("Please enter both email and password.");
+            return;
+        }
+
+        // Option-C: persist email + password locally (user requested)
+        if (rememberEl.checked) {
+            localStorage.setItem("saved_email", email);
+            localStorage.setItem("saved_pass", pass);
+        } else {
+            localStorage.removeItem("saved_email");
+            localStorage.removeItem("saved_pass");
+        }
+
+        // Mark as logged in
+        localStorage.setItem("logged_in", "true");
+        localStorage.setItem("current_user", email);
+
+        // smooth fade out then redirect
+        document.documentElement.style.transition = "opacity 0.55s ease";
+        document.documentElement.style.opacity = "0";
+        setTimeout(() => { window.location.href = "index.html"; }, 560);
+    }
+
+    function notify(msg) {
+        const d = document.createElement("div");
+        d.className = "toast"; d.textContent = msg;
+        document.body.appendChild(d);
+        setTimeout(() => d.remove(), 3000);
+    }
+</script>
+</body>
+</html>
