@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -7,7 +7,6 @@
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-
 
     <style>
         /* * GLOBAL RESET & THEME VARIABLES 
@@ -41,6 +40,7 @@
             padding-bottom: 20px;
             display: flex;
             flex-direction: column;
+            transition: opacity .6s ease; /* used for fade-out on logout */
         }
 
 
@@ -424,11 +424,35 @@
             .source-tabs { overflow-x: auto; padding-bottom: 5px; }
             .tab-btn { white-space: nowrap; }
         }
+
+        /* Logout Modal styling (simple, inline to match theme) */
+        .modal-backdrop {
+            position: fixed; inset:0; display:none; align-items:center; justify-content:center;
+            background: rgba(0,0,0,.6); z-index:99999; backdrop-filter: blur(4px);
+        }
+        .modal-card {
+            width: 92%; max-width:420px; background: linear-gradient(180deg, rgba(43,18,7,.98), rgba(61,31,17,.98));
+            border-radius:14px; padding:22px; border:1px solid rgba(255,255,255,.06); color:#fff;
+            box-shadow: 0 20px 60px rgba(0,0,0,.6);
+        }
+        .modal-actions { margin-top:18px; display:flex; gap:12px; justify-content:space-between; }
+        .modal-btn { padding:10px 14px; border-radius:10px; font-weight:700; cursor:pointer; border:none }
+        .modal-cancel { background:#333; color:#fff; }
+        .modal-logout { background:#ff6b6b; color:#fff; }
     </style>
 </head>
 
-
 <body>
+    <!-- LOGIN PROTECTION: redirect to login if not logged in -->
+    <script>
+        if (!localStorage.getItem("logged_in") || localStorage.getItem("logged_in") !== "true") {
+            // If the current page is already login.html, don't redirect loop.
+            if (!location.pathname.endsWith("login.html")) {
+                location.href = "login.html";
+            }
+        }
+    </script>
+
     <div class="container">
         
         <header>
@@ -472,6 +496,11 @@
                             </button>
                             <button class="action-btn" title="Back to Home" id="btnHome">
                                 <i class="fas fa-home"></i>
+                            </button>
+
+                            <!-- LOGOUT BUTTON -->
+                            <button class="action-btn" title="Logout" id="btnLogout">
+                                <i class="fas fa-sign-out-alt"></i>
                             </button>
                         </div>
                     </div>
@@ -517,17 +546,24 @@
         </footer>
     </div>
 
+    <!-- Logout confirmation modal element -->
+    <div id="logoutModal" class="modal-backdrop" aria-hidden="true" role="dialog" aria-modal="true">
+        <div class="modal-card" role="document" aria-labelledby="logoutTitle">
+            <h3 id="logoutTitle" style="color:var(--gold-1); margin:0 0 8px;">Confirm Logout</h3>
+            <p style="color:rgba(255,255,255,.85); margin:0 0 14px">Are you sure you want to logout from WikiMatch?</p>
+            <div class="modal-actions">
+                <button class="modal-btn modal-cancel" id="modalCancel">Cancel</button>
+                <button class="modal-btn modal-logout" id="modalLogout">Logout</button>
+            </div>
+        </div>
+    </div>
 
     <script>
         /*******************************
-         * WikiSearch Professional v2.1
-         * - Added Wikimedia Support
-         * - PDF Removed
-         * - Enhanced UI/UX
+         * WikiSearch Professional v2.1 (integrated with login/logout)
          *******************************/
 
-
-        // DOM Elements
+        // DOM Elements (existing)
         const queryInput = document.getElementById('query');
         const searchBtn = document.getElementById('searchBtn');
         const resultFrame = document.getElementById('resultFrame');
@@ -538,29 +574,20 @@
         const tabButtons = document.querySelectorAll('.tab-btn');
         const btnHome = document.getElementById('btnHome');
         const btnRefresh = document.getElementById('btnRefresh');
-
+        const btnLogout = document.getElementById('btnLogout');
 
         // State Variables
         let activeSource = 'wikipedia'; // wikipedia | wikibooks | wikimedia | archive
         let lastBlobUrl = null;
         let lastQuery = '';
 
-
         // --- Event Listeners ---
-
-
-        // Search Trigger
         searchBtn.addEventListener('click', () => triggerSearch());
         queryInput.addEventListener('keydown', (e) => { 
             if (e.key === 'Enter') triggerSearch(); 
         });
 
-
-        // Home Button
         btnHome.addEventListener('click', showWelcomeScreen);
-
-
-        // Fixed Refresh Logic
         btnRefresh.addEventListener('click', () => {
             if (lastQuery) {
                 notify('Refreshing content...', 'info');
@@ -570,19 +597,11 @@
             }
         });
 
-
-        // Tab Switching
         tabButtons.forEach(tb => {
             tb.addEventListener('click', () => {
-                // UI Update
                 tabButtons.forEach(b => b.classList.remove('active'));
                 tb.classList.add('active');
-
-
-                // Update State
                 activeSource = tb.dataset.source;
-                
-                // If there is an active query, auto-search new source
                 const currentVal = queryInput.value.trim();
                 if (currentVal) {
                     triggerSearch(currentVal);
@@ -592,32 +611,33 @@
             });
         });
 
-
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
             queryInput.focus();
             showWelcomeScreen();
+
+            // SHOW GREETING if current_user present
+            const userEmail = localStorage.getItem('current_user');
+            if (userEmail) {
+                // Use a friendly, truncated display for long emails
+                const short = userEmail.length > 22 ? userEmail.slice(0, 18) + '...' : userEmail;
+                currentSearchLabel.textContent = `Welcome, ${short}`;
+            }
+
+            // Attach logout handlers (modal)
+            setupLogoutModal();
         });
 
-
         // --- Core Functions ---
-
-
         async function triggerSearch(overrideQuery = null) {
             const raw = overrideQuery || queryInput.value.trim();
-            
             if (!raw) {
                 notify('Please enter a topic to search', 'warning');
                 return;
             }
-
-
             lastQuery = raw;
             showLoading();
-
-
             try {
-                // Logic updated to include Wikimedia
                 if (activeSource === 'wikipedia' || activeSource === 'wikibooks' || activeSource === 'wikimedia') {
                     await handleWikiSearch(activeSource, raw);
                 } else if (activeSource === 'archive') {
@@ -630,80 +650,44 @@
             }
         }
 
-
         async function handleWikiSearch(source, query) {
             let domain = '';
-            
-            // Domain selection logic
-            if (source === 'wikipedia') {
-                domain = 'en.wikipedia.org';
-            } else if (source === 'wikibooks') {
-                domain = 'en.wikibooks.org';
-            } else if (source === 'wikimedia') {
-                domain = 'commons.wikimedia.org'; // Points to Wikimedia Commons
-            }
-            
-            // 1. Get Page Title
+            if (source === 'wikipedia') domain = 'en.wikipedia.org';
+            else if (source === 'wikibooks') domain = 'en.wikibooks.org';
+            else if (source === 'wikimedia') domain = 'commons.wikimedia.org';
+
             const title = await fetchTopTitle(domain, query);
             if (!title) {
                 notify(`No results found on ${source} for "${query}"`, 'warning');
                 showWelcomeScreen();
                 return;
             }
-
-
-            // 2. Fetch HTML
             const html = await fetchPageHtml(domain, title);
             if (!html) {
                 notify('Failed to load page content.', 'danger');
                 showWelcomeScreen();
                 return;
             }
-
-
-            // 3. Process & Display
             const processedHtml = prepareHtml(domain, html);
             renderHtmlBlob(processedHtml);
         }
 
-
         function handleArchiveSearch(query) {
-            // Internet Archive Search Embed
             const archiveUrl = `https://archive.org/search.php?query=${encodeURIComponent(query)}`;
-            
-            if (lastBlobUrl) {
-                URL.revokeObjectURL(lastBlobUrl);
-                lastBlobUrl = null;
-            }
-
-
+            if (lastBlobUrl) { URL.revokeObjectURL(lastBlobUrl); lastBlobUrl = null; }
             resultFrame.src = archiveUrl;
-            
-            // Allow iframe to load
-            resultFrame.onload = () => {
-                hideLoading();
-            };
-            
-            // Fallback just in case onload doesn't fire
-            setTimeout(() => {
-                hideLoading();
-            }, 2500);
+            resultFrame.onload = () => { hideLoading(); };
+            setTimeout(() => { hideLoading(); }, 2500);
         }
 
-
         // --- API Helpers ---
-
-
         async function fetchTopTitle(domain, query) {
             const endpoint = `https://${domain}/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(query)}&srlimit=1&format=json&origin=*`;
             const resp = await fetch(endpoint);
             const data = await resp.json();
-            if (data.query && data.query.search.length > 0) {
-                return data.query.search[0].title;
-            }
+            if (data.query && data.query.search.length > 0) return data.query.search[0].title;
             return null;
         }
-
 
         async function fetchPageHtml(domain, title) {
             const endpoint = `https://${domain}/api/rest_v1/page/html/${encodeURIComponent(title)}`;
@@ -712,10 +696,8 @@
             return null;
         }
 
-
         function prepareHtml(domain, html) {
             const baseTag = `<base href="https://${domain}/">`;
-            // Inject a clean custom style block into the fetched HTML
             const customStyles = `
                 <style>
                     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; padding: 20px; line-height: 1.6; color: #111; }
@@ -725,46 +707,32 @@
                     img { max-width: 100%; height: auto; border-radius: 8px; }
                 </style>
             `;
-            
-            // Clean Scripts
             let clean = html.replace(/<script\b[^>]*>([\s\S]*?)<\/script>/gm, "");
-            
-            if (clean.includes('<head>')) {
-                return clean.replace('<head>', `<head>${baseTag}${customStyles}`);
-            } else {
-                return `${baseTag}${customStyles}${clean}`;
-            }
+            if (clean.includes('<head>')) return clean.replace('<head>', `<head>${baseTag}${customStyles}`);
+            else return `${baseTag}${customStyles}${clean}`;
         }
-
 
         function renderHtmlBlob(htmlContent) {
             if (lastBlobUrl) URL.revokeObjectURL(lastBlobUrl);
-            
             const blob = new Blob([htmlContent], { type: 'text/html' });
             lastBlobUrl = URL.createObjectURL(blob);
             resultFrame.src = lastBlobUrl;
-            
             resultFrame.onload = () => hideLoading();
         }
 
-
         // --- UI State Management ---
-
-
         function showLoading() {
             loadingIndicator.style.display = 'flex';
             resultFrame.style.display = 'none';
             welcomeScreen.style.display = 'none';
         }
 
-
         function hideLoading() {
             loadingIndicator.style.display = 'none';
             resultFrame.style.display = 'block';
             welcomeScreen.style.display = 'none';
-            currentSearchLabel.textContent = "WikiMatch"; 
+            // keep greeting on header
         }
-
 
         function showWelcomeScreen() {
             resultFrame.style.display = 'none';
@@ -775,17 +743,53 @@
             lastQuery = '';
         }
 
-
         function notify(msg, type) {
             const div = document.createElement('div');
             div.className = 'toast';
             div.style.borderLeftColor = type === 'danger' ? '#ff4d4d' : '#ffd37e';
             div.innerHTML = `<span>${msg}</span>`;
-            
             document.body.appendChild(div);
             setTimeout(() => div.remove(), 4000);
         }
 
+        // --- LOGOUT MODAL & HANDLERS ---
+        function setupLogoutModal() {
+            const modal = document.getElementById('logoutModal');
+            const modalCancel = document.getElementById('modalCancel');
+            const modalLogout = document.getElementById('modalLogout');
+
+            if (!btnLogout) return; // graceful
+
+            btnLogout.addEventListener('click', () => {
+                modal.style.display = 'flex';
+                modal.setAttribute('aria-hidden', 'false');
+            });
+
+            modalCancel.addEventListener('click', () => {
+                modal.style.display = 'none';
+                modal.setAttribute('aria-hidden', 'true');
+            });
+
+            modalLogout.addEventListener('click', () => {
+                // fade out body
+                document.body.style.opacity = '0';
+                // remove session keys (but keep saved email/pass for "remember me" feature)
+                localStorage.removeItem('logged_in');
+                localStorage.removeItem('current_user');
+
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 600);
+            });
+
+            // Close modal on Escape
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    modal.style.display = 'none';
+                    modal.setAttribute('aria-hidden', 'true');
+                }
+            });
+        }
 
     </script>
 </body>
