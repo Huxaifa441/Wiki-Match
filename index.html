@@ -9,9 +9,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
     <style>
-        /* * GLOBAL RESET & THEME VARIABLES 
-         * Premium Gold/Copper Aesthetic
-         */
         :root {
             --copper-1: #2b1207;
             --copper-2: #3d1f11;
@@ -23,9 +20,7 @@
             --border-light: rgba(255, 255, 255, 0.04);
         }
 
-
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
 
         body {
             font-family: 'Poppins', sans-serif;
@@ -40,12 +35,11 @@
             padding-bottom: 20px;
             display: flex;
             flex-direction: column;
-            transition: opacity .6s ease; /* used for fade-out on logout */
+            transition: opacity .6s ease;
         }
 
-
         .container {
-            max-width: 1400px; /* Increased width for better viewing */
+            max-width: 1400px;
             width: 95%;
             margin: 0 auto;
             padding: 10px 18px;
@@ -54,8 +48,7 @@
             flex-direction: column;
         }
 
-
-        /* HEADER LAYOUT */
+        /* HEADER */
         header {
             display: flex;
             align-items: center;
@@ -64,14 +57,12 @@
             margin-bottom: 10px;
         }
 
-
         .brand {
             display: flex;
             align-items: center;
             gap: 12px;
             flex-shrink: 0;
         }
-
 
         .logo-icon {
             width: 48px;
@@ -84,8 +75,8 @@
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
             font-size: 20px;
             color: #2b1207;
+            cursor: pointer; /* make hamburger clickable */
         }
-
 
         h1 {
             font-size: 1.4rem;
@@ -94,7 +85,6 @@
             letter-spacing: 0.5px;
         }
 
-
         /* SEARCH BAR */
         .top-search {
             flex: 1;
@@ -102,7 +92,6 @@
             align-items: center;
             justify-content: flex-end;
         }
-
 
         .search-wrapper {
             width: 100%;
@@ -124,7 +113,6 @@
             box-shadow: 0 4px 20px rgba(0,0,0,0.2);
         }
 
-
         #query {
             flex: 1;
             padding: 12px;
@@ -136,9 +124,7 @@
             font-family: 'Inter', sans-serif;
         }
 
-
         #query::placeholder { color: rgba(255, 255, 255, 0.5); }
-
 
         .search-btn {
             display: flex;
@@ -155,14 +141,12 @@
         }
         .search-btn:active { transform: scale(0.96); }
 
-
-        /* MAIN CONTENT & RESULT AREA */
+        /* MAIN */
         main {
             flex: 1;
             display: flex;
             flex-direction: column;
         }
-
 
         .result-section {
             display: flex;
@@ -171,15 +155,13 @@
             flex: 1;
         }
 
-
         /* TABS */
         .source-tabs {
             display: flex;
             gap: 10px;
             align-items: center;
-            flex-wrap: wrap; /* Allows wrapping on small screens */
+            flex-wrap: wrap;
         }
-
 
         .tab-btn {
             padding: 10px 16px;
@@ -193,9 +175,7 @@
             font-size: 0.95rem;
         }
 
-
         .tab-btn:hover { background: rgba(255, 255, 255, 0.06); }
-
 
         .tab-btn.active {
             background: linear-gradient(90deg, #4b2b1a, #b06b35);
@@ -204,8 +184,7 @@
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
         }
 
-
-        /* RESULT CONTAINER - UPDATED SIZE */
+        /* RESULT CONTAINER */
         .result-container {
             margin-top: 5px;
             background: var(--card);
@@ -213,14 +192,12 @@
             overflow: hidden;
             border: 1px solid var(--border-light);
             box-shadow: 0 20px 50px rgba(11, 7, 5, 0.6);
-            /* Massive Height Increase */
             height: 80vh; 
             min-height: 600px;
             display: flex;
             flex-direction: column;
             position: relative;
         }
-
 
         .result-header {
             display: flex;
@@ -232,7 +209,6 @@
             height: 60px;
         }
 
-
         .result-title {
             display: flex;
             gap: 10px;
@@ -242,13 +218,11 @@
             font-size: 1.1rem;
         }
 
-
         .result-actions {
             display: flex;
             gap: 10px;
             align-items: center;
         }
-
 
         .action-btn {
             width: 40px;
@@ -264,15 +238,13 @@
             transition: all 0.2s;
         }
 
-
         .action-btn:hover {
             background: rgba(255, 255, 255, 0.1);
             transform: translateY(-2px);
             color: var(--gold-1);
         }
 
-
-        /* IFRAME AREA */
+        /* IFRAME */
         #resultFrame {
             flex: 1;
             width: 100%;
@@ -281,12 +253,11 @@
             display: block;
         }
 
-
-        /* WELCOME & LOADING STATES */
+        /* WELCOME & LOADING */
         .loading-container,
         .welcome-screen {
             position: absolute;
-            top: 60px; /* below header */
+            top: 60px;
             left: 0;
             right: 0;
             bottom: 0;
@@ -297,10 +268,9 @@
             gap: 18px;
             padding: 24px;
             text-align: center;
-            background: var(--card); /* Match container bg */
+            background: var(--card);
             z-index: 10;
         }
-
 
         .welcome-icon {
             font-size: 56px;
@@ -308,7 +278,6 @@
             margin-bottom: 10px;
             filter: drop-shadow(0 0 15px rgba(255, 211, 126, 0.2));
         }
-
 
         .welcome-screen h2 {
             font-size: 2rem;
@@ -322,8 +291,6 @@
             color: rgba(255, 255, 255, 0.7);
         }
 
-
-        /* SPINNER */
         @keyframes spin { to { transform: rotate(360deg); } }
         .spinner {
             width: 60px;
@@ -334,8 +301,7 @@
             animation: spin 0.8s ease-in-out infinite;
         }
 
-
-        /* STATS (Bottom Bar) */
+        /* STATS */
         .stats-section {
             display: flex;
             gap: 20px;
@@ -343,7 +309,6 @@
             padding: 15px 0 5px 0;
             flex-wrap: wrap;
         }
-
 
         .stat-box {
             background: rgba(0, 0, 0, 0.2);
@@ -355,13 +320,11 @@
             gap: 10px;
         }
 
-
         .stat-number {
             font-size: 1rem;
             font-weight: 800;
             color: var(--gold-1);
         }
-
 
         .stat-label {
             color: rgba(255, 255, 255, 0.6);
@@ -370,7 +333,6 @@
             letter-spacing: 0.5px;
         }
 
-
         footer {
             margin-top: 10px;
             text-align: center;
@@ -378,8 +340,7 @@
             font-size: 0.85rem;
         }
 
-
-        /* TOAST NOTIFICATION */
+        /* TOAST */
         .toast {
             position: fixed;
             right: 20px;
@@ -399,36 +360,107 @@
         }
         @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 
-
-        /* RESPONSIVE */
-        @media (max-width: 900px) {
-            header { flex-direction: column; align-items: stretch; }
-            .top-search { width: 100%; justify-content: center; }
-            .search-wrapper { max-width: 100%; }
-            .result-container { height: 70vh; }
+        /* SIDEBAR (ChatGPT-style) */
+        .side-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
+            display: none;
+            z-index: 9995;
         }
 
-
-        /* FIXED: Mobile Search Bar Fix */
-        @media (max-width: 600px) {
-            /* Hide 'Search' text on small screens */
-            .search-btn span { display: none; }
-            
-            /* Adjust button size */
-            .search-btn { padding: 10px 14px; gap: 0; }
-            
-            /* Adjust input size */
-            #query { font-size: 0.95rem; padding: 10px; }
-            .search-wrapper { padding: 4px 6px; }
-            
-            .source-tabs { overflow-x: auto; padding-bottom: 5px; }
-            .tab-btn { white-space: nowrap; }
+        .side-backdrop.open {
+            display: block;
         }
 
-        /* Logout Modal styling (simple, inline to match theme) */
+        .side-drawer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 270px;
+            background: linear-gradient(180deg, rgba(27,12,6,0.98), rgba(42,20,10,0.98));
+            border-right: 1px solid rgba(255,255,255,0.06);
+            box-shadow: 4px 0 30px rgba(0,0,0,0.7);
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-out;
+            z-index: 9996;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .side-drawer.open {
+            transform: translateX(0);
+        }
+
+        .side-header {
+            padding: 16px 16px 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .side-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+            color: var(--gold-1);
+        }
+
+        .side-close {
+            border: none;
+            background: transparent;
+            color: rgba(255,255,255,0.7);
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .side-nav {
+            padding: 10px 8px 16px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .side-link {
+            width: 100%;
+            border: none;
+            background: transparent;
+            color: rgba(255,255,255,0.85);
+            padding: 9px 10px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            font-size: 0.97rem;
+            margin-bottom: 4px;
+        }
+
+        .side-link i {
+            width: 20px;
+            text-align: center;
+        }
+
+        .side-link:hover {
+            background: rgba(255,255,255,0.06);
+        }
+
+        .side-link--accent {
+            background: linear-gradient(90deg, #4b2b1a, #b06b35);
+            color: #fff;
+        }
+
+        .side-link--accent:hover {
+            background: linear-gradient(90deg, #5c3520, #c7783c);
+        }
+
+        /* LOGOUT MODAL */
         .modal-backdrop {
             position: fixed; inset:0; display:none; align-items:center; justify-content:center;
-            background: rgba(0,0,0,.6); z-index:99999; backdrop-filter: blur(4px);
+            background: rgba(0,0,0,.6); z-index:9999; backdrop-filter: blur(4px);
         }
         .modal-card {
             width: 92%; max-width:420px; background: linear-gradient(180deg, rgba(43,18,7,.98), rgba(61,31,17,.98));
@@ -439,14 +471,130 @@
         .modal-btn { padding:10px 14px; border-radius:10px; font-weight:700; cursor:pointer; border:none }
         .modal-cancel { background:#333; color:#fff; }
         .modal-logout { background:#ff6b6b; color:#fff; }
+
+        /* CALCULATOR MODAL */
+        .calc-backdrop {
+            position: fixed;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(4px);
+            z-index: 9998;
+        }
+
+        .calc-backdrop.open {
+            display: flex;
+        }
+
+        .calc-modal {
+            width: 96%;
+            max-width: 420px;
+            background: linear-gradient(180deg, rgba(43,18,7,.98), rgba(61,31,17,.98));
+            border-radius: 18px;
+            border: 1px solid rgba(255,255,255,0.06);
+            box-shadow: 0 24px 70px rgba(0,0,0,0.8);
+            padding: 16px 16px 18px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .calc-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .calc-header h3 {
+            margin: 0;
+            color: var(--gold-1);
+            font-size: 1.1rem;
+        }
+
+        .calc-close {
+            border: none;
+            background: transparent;
+            color: rgba(255,255,255,0.8);
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .calc-display {
+            width: 100%;
+            margin-bottom: 12px;
+            padding: 10px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(0,0,0,0.4);
+            color: #fff;
+            font-size: 1.4rem;
+            text-align: right;
+            font-family: 'Inter', monospace;
+        }
+
+        .calc-display:focus {
+            outline: none;
+        }
+
+        .calc-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        .calc-btn {
+            padding: 10px 0;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(0,0,0,0.35);
+            color: #fff;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: background 0.15s, transform 0.1s, box-shadow 0.15s;
+        }
+
+        .calc-btn:active {
+            transform: scale(0.96);
+            box-shadow: 0 0 0 rgba(0,0,0,0);
+        }
+
+        .calc-btn--accent {
+            background: linear-gradient(135deg, #b87333, #ffd37e);
+            color: #2b1207;
+            font-weight: 600;
+        }
+
+        .calc-btn--danger {
+            background: rgba(189, 62, 62, 0.85);
+        }
+
+        .calc-btn--op {
+            background: rgba(255,255,255,0.08);
+        }
+
+        @media (max-width: 900px) {
+            header { flex-direction: column; align-items: stretch; }
+            .top-search { width: 100%; justify-content: center; }
+            .search-wrapper { max-width: 100%; }
+            .result-container { height: 70vh; }
+        }
+
+        @media (max-width: 600px) {
+            .search-btn span { display: none; }
+            .search-btn { padding: 10px 14px; gap: 0; }
+            #query { font-size: 0.95rem; padding: 10px; }
+            .search-wrapper { padding: 4px 6px; }
+            .source-tabs { overflow-x: auto; padding-bottom: 5px; }
+            .tab-btn { white-space: nowrap; }
+        }
     </style>
 </head>
 
 <body>
-    <!-- LOGIN PROTECTION: redirect to login if not logged in -->
     <script>
         if (!localStorage.getItem("logged_in") || localStorage.getItem("logged_in") !== "true") {
-            // If the current page is already login.html, don't redirect loop.
             if (!location.pathname.endsWith("login.html")) {
                 location.href = "login.html";
             }
@@ -457,7 +605,9 @@
         
         <header>
             <div class="brand">
-                <div class="logo-icon"><i class="fas fa-search"></i></div>
+                <div class="logo-icon" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </div>
                 <h1>WikiMatch</h1>
             </div>
             <div class="top-search">
@@ -470,6 +620,40 @@
             </div>
         </header>
 
+        <div class="side-backdrop" id="sideBackdrop"></div>
+        <aside class="side-drawer" id="sideDrawer">
+            <div class="side-header">
+                <span class="side-title">
+                    <i class="fas fa-globe-asia"></i> WikiMatch
+                </span>
+                <button class="side-close" id="sideClose"><i class="fas fa-times"></i></button>
+            </div>
+            <nav class="side-nav">
+                <button class="side-link" data-action="home">
+                    <i class="fas fa-house"></i><span>Home</span>
+                </button>
+                <button class="side-link" data-action="tab" data-source="wikipedia">
+                    <i class="fab fa-wikipedia-w"></i><span>Wikipedia</span>
+                </button>
+                <button class="side-link" data-action="tab" data-source="wikibooks">
+                    <i class="fas fa-book"></i><span>Wikibooks</span>
+                </button>
+                <button class="side-link" data-action="tab" data-source="wikimedia">
+                    <i class="fas fa-image"></i><span>Wikimedia</span>
+                </button>
+                <button class="side-link" data-action="tab" data-source="archive">
+                    <i class="fas fa-archive"></i><span>Internet Archive</span>
+                </button>
+
+                <button class="side-link" data-action="calculator">
+                    <i class="fas fa-calculator"></i><span>Scientific Calculator</span>
+                </button>
+
+                <button class="side-link" data-action="logout">
+                    <i class="fas fa-sign-out-alt"></i><span>Logout</span>
+                </button>
+            </nav>
+        </aside>
 
         <main>
             <section class="result-section">
@@ -480,7 +664,6 @@
                     <button class="tab-btn" data-source="archive" id="tab-archive">Internet Archive</button>
                 </div>
 
-
                 <div class="result-container" id="resultContainer">
                     
                     <div class="result-header">
@@ -488,7 +671,6 @@
                             <i class="fas fa-book-open" style="color:var(--gold-2);"></i>
                             <span id="currentSearch">WikiSearch</span> 
                         </div>
-
 
                         <div class="result-actions">
                             <button class="action-btn" title="Reload Search" id="btnRefresh">
@@ -498,19 +680,16 @@
                                 <i class="fas fa-home"></i>
                             </button>
 
-                            <!-- LOGOUT BUTTON -->
                             <button class="action-btn" title="Logout" id="btnLogout">
                                 <i class="fas fa-sign-out-alt"></i>
                             </button>
                         </div>
                     </div>
 
-
                     <div id="loadingIndicator" class="loading-container" style="display:none;">
                         <div class="spinner"></div>
                         <div style="font-weight:500; letter-spacing:1px; color:var(--gold-1);">ACCESSING DATABASE...</div>
                     </div>
-
 
                     <div id="welcomeScreen" class="welcome-screen">
                         <div class="welcome-icon"><i class="fas fa-globe-americas"></i></div>
@@ -518,10 +697,8 @@
                         <p>Access millions of articles from Wikipedia, Wikibooks, Wikimedia Commons, and historical archives instantly.</p>
                     </div>
 
-
                     <iframe id="resultFrame" style="display:none;" sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>
                 </div>
-
 
                 <section class="stats-section">
                     <div class="stat-box">
@@ -529,7 +706,7 @@
                         <div class="stat-label">Articles</div>
                     </div>
                     <div class="stat-box">
-                        <div class="stat-number">300+</div>
+                        <div class="stat-number">300+</</div>
                         <div class="stat-label">Languages</div>
                     </div>
                     <div class="stat-box">
@@ -540,13 +717,11 @@
             </section>
         </main>
 
-
         <footer>
             © 2025 WikiMatch Enterprise | Engineered for Knowledge by Huzaifa
         </footer>
     </div>
 
-    <!-- Logout confirmation modal element -->
     <div id="logoutModal" class="modal-backdrop" aria-hidden="true" role="dialog" aria-modal="true">
         <div class="modal-card" role="document" aria-labelledby="logoutTitle">
             <h3 id="logoutTitle" style="color:var(--gold-1); margin:0 0 8px;">Confirm Logout</h3>
@@ -558,12 +733,59 @@
         </div>
     </div>
 
+    <div id="calculatorModal" class="calc-backdrop" aria-hidden="true" role="dialog" aria-modal="true">
+        <div class="calc-modal" role="document">
+            <div class="calc-header">
+                <h3>Scientific Calculator</h3>
+                <button class="calc-close" id="calcClose"><i class="fas fa-times"></i></button>
+            </div>
+            <input id="calcDisplay" class="calc-display" type="text" value="0" readonly />
+
+            <div class="calc-grid">
+                <button class="calc-btn calc-btn--danger" data-key="AC">AC</button>
+                <button class="calc-btn calc-btn--op" data-key="DEL">DEL</button>
+                <button class="calc-btn calc-btn--op" data-key="(">(</button>
+                <button class="calc-btn calc-btn--op" data-key=")">)</button>
+
+                <button class="calc-btn calc-btn--op" data-key="sin(">sin</button>
+                <button class="calc-btn calc-btn--op" data-key="cos(">cos</button>
+                <button class="calc-btn calc-btn--op" data-key="tan(">tan</button>
+                <button class="calc-btn calc-btn--op" data-key="^">xʸ</button>
+
+                <button class="calc-btn" data-key="7">7</button>
+                <button class="calc-btn" data-key="8">8</button>
+                <button class="calc-btn" data-key="9">9</button>
+                <button class="calc-btn calc-btn--op" data-key="/">÷</button>
+
+                <button class="calc-btn" data-key="4">4</button>
+                <button class="calc-btn" data-key="5">5</button>
+                <button class="calc-btn" data-key="6">6</button>
+                <button class="calc-btn calc-btn--op" data-key="*">×</button>
+
+                <button class="calc-btn" data-key="1">1</button>
+                <button class="calc-btn" data-key="2">2</button>
+                <button class="calc-btn" data-key="3">3</button>
+                <button class="calc-btn calc-btn--op" data-key="-">−</button>
+
+                <button class="calc-btn" data-key="0">0</button>
+                <button class="calc-btn" data-key=".">.</button>
+                <button class="calc-btn calc-btn--op" data-key="+">+</button>
+                <button class="calc-btn calc-btn--accent" data-key="=">=</button>
+
+                <button class="calc-btn calc-btn--op" data-key="√(">√</button>
+                <button class="calc-btn calc-btn--op" data-key="log(">log</button>
+                <button class="calc-btn calc-btn--op" data-key="ln(">ln</button>
+                <button class="calc-btn calc-btn--op" data-key="π">π</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         /*******************************
-         * WikiSearch Professional v2.1 (integrated with login/logout)
+         * WikiSearch + Sidebar + Calculator
          *******************************/
 
-        // DOM Elements (existing)
+        // DOM elements
         const queryInput = document.getElementById('query');
         const searchBtn = document.getElementById('searchBtn');
         const resultFrame = document.getElementById('resultFrame');
@@ -576,12 +798,30 @@
         const btnRefresh = document.getElementById('btnRefresh');
         const btnLogout = document.getElementById('btnLogout');
 
-        // State Variables
-        let activeSource = 'wikipedia'; // wikipedia | wikibooks | wikimedia | archive
+        // Sidebar
+        const menuToggle = document.getElementById('menuToggle');
+        const sideDrawer = document.getElementById('sideDrawer');
+        const sideBackdrop = document.getElementById('sideBackdrop');
+        const sideClose = document.getElementById('sideClose');
+        const sideLinks = document.querySelectorAll('.side-link');
+
+        // Calculator
+        const calculatorModal = document.getElementById('calculatorModal');
+        const calcClose = document.getElementById('calcClose');
+        const calcDisplay = document.getElementById('calcDisplay');
+        const calcButtons = document.querySelectorAll('.calc-btn');
+
+        // Logout modal
+        const logoutModal = document.getElementById('logoutModal');
+
+        // State
+        let activeSource = 'wikipedia';
         let lastBlobUrl = null;
         let lastQuery = '';
+        let calcExpression = '';
 
-        // --- Event Listeners ---
+        /* --- EVENT LISTENERS --- */
+
         searchBtn.addEventListener('click', () => triggerSearch());
         queryInput.addEventListener('keydown', (e) => { 
             if (e.key === 'Enter') triggerSearch(); 
@@ -611,24 +851,143 @@
             });
         });
 
-        // Initialize
+        // Sidebar interactions
+        function openSidebar() {
+            sideDrawer.classList.add('open');
+            sideBackdrop.classList.add('open');
+        }
+        function closeSidebar() {
+            sideDrawer.classList.remove('open');
+            sideBackdrop.classList.remove('open');
+        }
+
+        if (menuToggle) menuToggle.addEventListener('click', openSidebar);
+        if (sideClose) sideClose.addEventListener('click', closeSidebar);
+        sideBackdrop.addEventListener('click', closeSidebar);
+
+        sideLinks.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // CORRECTION: Highlight logic
+                // 1. Sabhi links se highlight remove karo
+                sideLinks.forEach(b => b.classList.remove('side-link--accent'));
+                
+                // 2. Jis par click kiya wo highlight karo (Logout ko chhod kar)
+                if (btn.dataset.action !== 'logout') {
+                    btn.classList.add('side-link--accent');
+                }
+
+                const action = btn.dataset.action;
+                if (action === 'home') {
+                    showWelcomeScreen();
+                } else if (action === 'tab') {
+                    const source = btn.dataset.source;
+                    const targetTab = document.querySelector(`.tab-btn[data-source="${source}"]`);
+                    if (targetTab) targetTab.click();
+                } else if (action === 'calculator') {
+                    openCalculatorModal();
+                } else if (action === 'logout') {
+                    if (btnLogout) btnLogout.click();
+                }
+                closeSidebar();
+            });
+        });
+
+        // Calculator logic
+        function openCalculatorModal() {
+            calculatorModal.classList.add('open');
+            calculatorModal.setAttribute('aria-hidden', 'false');
+        }
+        function closeCalculatorModal() {
+            calculatorModal.classList.remove('open');
+            calculatorModal.setAttribute('aria-hidden', 'true');
+        }
+
+        calcClose.addEventListener('click', closeCalculatorModal);
+        calculatorModal.addEventListener('click', (e) => {
+            if (e.target === calculatorModal) {
+                closeCalculatorModal();
+            }
+        });
+
+        calcButtons.forEach(btn => {
+            btn.addEventListener('click', () => handleCalcKey(btn.dataset.key));
+        });
+
+        function handleCalcKey(key) {
+            if (key === 'AC') {
+                calcExpression = '';
+            } else if (key === 'DEL') {
+                calcExpression = calcExpression.slice(0, -1);
+            } else if (key === '=') {
+                if (!calcExpression) return;
+                try {
+                    let expr = calcExpression;
+
+                    // replace functions
+                    expr = expr.replace(/sin\(/g, 'Math.sin(')
+                               .replace(/cos\(/g, 'Math.cos(')
+                               .replace(/tan\(/g, 'Math.tan(')
+                               .replace(/log\(/g, 'Math.log10(')
+                               .replace(/ln\(/g, 'Math.log(')
+                               .replace(/√\(/g, 'Math.sqrt(')
+                               .replace(/π/g, 'Math.PI')
+                               .replace(/\^/g, '**');
+
+                    if (!Math.log10) {
+                        Math.log10 = function(x){ return Math.log(x) / Math.LN10; }
+                    }
+
+                    const result = eval(expr);
+                    calcExpression = String(result);
+                } catch (err) {
+                    calcExpression = 'Error';
+                }
+            } else {
+                if (calcExpression === 'Error') calcExpression = '';
+                calcExpression += key;
+            }
+
+            if (!calcExpression) {
+                calcDisplay.value = '0';
+            } else {
+                calcDisplay.value = calcExpression;
+            }
+        }
+
+        // General keyboard ESC handling (close modals / sidebar)
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeSidebar();
+                closeCalculatorModal();
+                if (logoutModal) {
+                    logoutModal.style.display = 'none';
+                    logoutModal.setAttribute('aria-hidden', 'true');
+                }
+            }
+        });
+
+        // INIT
         document.addEventListener('DOMContentLoaded', () => {
             queryInput.focus();
             showWelcomeScreen();
 
-            // SHOW GREETING if current_user present
+            // CORRECTION: Default highlight Home button on load
+            const homeLink = document.querySelector('.side-link[data-action="home"]');
+            if (homeLink) {
+                homeLink.classList.add('side-link--accent');
+            }
+
             const userEmail = localStorage.getItem('current_user');
             if (userEmail) {
-                // Use a friendly, truncated display for long emails
                 const short = userEmail.length > 22 ? userEmail.slice(0, 18) + '...' : userEmail;
                 currentSearchLabel.textContent = `Welcome, ${short}`;
             }
 
-            // Attach logout handlers (modal)
             setupLogoutModal();
         });
 
-        // --- Core Functions ---
+        /* --- SEARCH LOGIC --- */
+
         async function triggerSearch(overrideQuery = null) {
             const raw = overrideQuery || queryInput.value.trim();
             if (!raw) {
@@ -680,7 +1039,6 @@
             setTimeout(() => { hideLoading(); }, 2500);
         }
 
-        // --- API Helpers ---
         async function fetchTopTitle(domain, query) {
             const endpoint = `https://${domain}/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(query)}&srlimit=1&format=json&origin=*`;
             const resp = await fetch(endpoint);
@@ -720,7 +1078,8 @@
             resultFrame.onload = () => hideLoading();
         }
 
-        // --- UI State Management ---
+        /* --- UI STATE --- */
+
         function showLoading() {
             loadingIndicator.style.display = 'flex';
             resultFrame.style.display = 'none';
@@ -731,7 +1090,6 @@
             loadingIndicator.style.display = 'none';
             resultFrame.style.display = 'block';
             welcomeScreen.style.display = 'none';
-            // keep greeting on header
         }
 
         function showWelcomeScreen() {
@@ -752,13 +1110,13 @@
             setTimeout(() => div.remove(), 4000);
         }
 
-        // --- LOGOUT MODAL & HANDLERS ---
+        /* --- LOGOUT MODAL --- */
         function setupLogoutModal() {
             const modal = document.getElementById('logoutModal');
             const modalCancel = document.getElementById('modalCancel');
             const modalLogout = document.getElementById('modalLogout');
 
-            if (!btnLogout) return; // graceful
+            if (!btnLogout) return;
 
             btnLogout.addEventListener('click', () => {
                 modal.style.display = 'flex';
@@ -771,9 +1129,7 @@
             });
 
             modalLogout.addEventListener('click', () => {
-                // fade out body
                 document.body.style.opacity = '0';
-                // remove session keys (but keep saved email/pass for "remember me" feature)
                 localStorage.removeItem('logged_in');
                 localStorage.removeItem('current_user');
 
@@ -781,17 +1137,7 @@
                     window.location.href = 'login.html';
                 }, 600);
             });
-
-            // Close modal on Escape
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') {
-                    modal.style.display = 'none';
-                    modal.setAttribute('aria-hidden', 'true');
-                }
-            });
         }
-
     </script>
 </body>
 </html>
-
